@@ -1,0 +1,18 @@
+{
+    "plugins": [
+        "mobx-async-action",
+        "transform-decorators-legacy",
+        "lodash",
+        [
+            "import",
+            {
+                "libraryName": "antd",
+                "libraryDirectory": "es",
+                "style": true
+            }
+        ]
+    ],
+    "presets": [
+        "react-app"
+    ]
+}
