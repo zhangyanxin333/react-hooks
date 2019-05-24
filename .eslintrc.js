@@ -8,6 +8,9 @@ module.exports = {
         React: false,
         ReactDOM: false
     },
+    plugins: [
+        "react-hooks"
+    ],
     rules: {
         // 禁止对函数的参数重新赋值, 关闭
         'no-param-reassign': 'off',
@@ -23,7 +26,7 @@ module.exports = {
             }
         ],
         // 函数的循环复杂度, 关闭
-        'complexity': 'off',
+        'complexity': 'warn',
         // Promise 的 reject 中必须传入 Error 对象，而不是字面量, 关闭
         'prefer-promise-reject-errors': 'off',
         // 禁止修改原生对象, 关闭
@@ -60,5 +63,8 @@ module.exports = {
         // 多个空行错误提示
         'no-multiple-empty-lines': 'error',
         'no-console': 2,
+        //react-hooks 查询接口依赖的数组
+        "react-hooks/rules-of-hooks": 'error',
+        "react-hooks/exhaustive-deps": 'warn' // <--- THIS IS THE NEW RULE
     }
 };
