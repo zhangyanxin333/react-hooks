@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, {useState, useEffect, Fragment} from 'react';
 import styles from './list.less';
 import {Form, Button, DatePicker, Cascader, Input, message} from 'antd';
@@ -25,7 +26,7 @@ const List = (props) => {
     const [initSearch, setSearch] = useState({belong: 'sort,human,place'});
     const log = () => {
         setTimeout(() => {
-            console.log('3 秒前 temp = 5，现在 temp =', temp);
+            // console.log('3 秒前 temp = 5，现在 temp =', temp);
         }, 1000);
     };
     // const [count, setCount] = React.useState(0);
@@ -40,153 +41,132 @@ const List = (props) => {
                 let list_1 = [];
                 let data = db && db.data[0].children ? db.data[0].children : [];
                 data.map(item => {
-                    let children = item.children ? item.children : [];
-                    return list_1.push({label: item.name, 
-                        value: item.name, 
-                        tagId: item.tagId,
-                        children: children.map(itm => { 
-                            return {label: itm.name, 
-                                value: itm.name,
-                                tagId: itm.tagId,
-                                children: itm.children.map(value => {
-                                    return {
-                                        label: value.name, 
-                                        value: value.name,
-                                        tagId: value.tagId
-                                    }
-                                })
-                            }
-                        }) 
-                    })
-                })
-                setData(list_1)
+                    return [];
+                });
+                setData(list_1);
             }
         }
         fetchData();
-    },[]);
+    }, []);
     // 搜索条件
     useEffect(() => {
         async function postSearch() {
-            const db = await serve.postSearch(initSearch)
-            console.log(db)
+            const db = await serve.postSearch(initSearch);
+            db.map(val => {
+                return [val];
+            });
+            // console.log(db);
         }
-        postSearch()
-    },[initSearch])
+        postSearch();
+    }, [initSearch]);
     // 输入框 这里获取的是失焦事件
-    // useEffect(() => {
-    //     async function postSearch() {
-    //         const db = await serve.postSearch(initInput)
-    //         console.log(db)
-    //     }
-    //     postSearch()
-    // },[initInput,])
+    useEffect(() => {
+        async function postSearch() {
+            const db = await serve.postSearch(initInput);
+            db.map(val => {
+                return [val];
+            });
+        }
+        postSearch();
+    }, [initInput]);
     /**
      * 更新选择时间
      */
     const updateTime = (filter) => {
-        if(filter.time[0] == '') {
-            filter.time = []
+        if (filter.time[0] === '') {
+            filter.time = [];
         }
         if (filter.days === '' || filter.time.length === 0) {
-            filter.startTime = filter['time'] && filter['time'].length !==0 ? filter['time'][0].format('YYYY-MM-DD') : '';
-            filter.endTime = filter['time'] && filter['time'].length !==0 ? filter['time'][1].format('YYYY-MM-DD') : '';
+            filter.startTime = filter['time'] && filter['time'].length !== 0 ? filter['time'][0].format('YYYY-MM-DD') : '';
+            filter.endTime = filter['time'] && filter['time'].length !== 0 ? filter['time'][1].format('YYYY-MM-DD') : '';
         } else {
             filter.startTime = filter['time'][0].format('YYYY-MM-DD');
             filter.endTime = filter['time'][1].format('YYYY-MM-DD');
         }
         delete filter['time'];
-        return filter
-    }
-    const searchBtn = ()=> {
+        return filter;
+    };
+    const searchBtn = () => {
         props.form.validateFields((err, filter) => {
-            setSearch(initSearch => updateTime(filter))
-        })
-    }
+            if (!err) {
+                setSearch(initSearch => updateTime(filter));
+            }
+        });
+    };
     const inputOnBlur = () => {
         props.form.validateFields((err, filter) => {
-            let newConditon = updateTime(filter)
-            newConditon = Object.assign({belong:'sort,human,place'},newConditon)
-            setInput(initInput => newConditon)
-            console.log(initInput)
-            // setSearch(initSearch => updateTime(filter))
-            // setSearch(initSearch => updateTime(filter))
-        })
-    }
+            if (!err) {
+                let newConditon = updateTime(filter);
+                newConditon = Object.assign({belong: 'sort,human,place'}, newConditon);
+                setInput(initInput => newConditon);
+            }
+            setSearch(initInput => updateTime(filter));
+            // console.log(initInput);
+            // setSearch(initSearch => updateTime(filter));
+            // setSearch(initSearch => updateTime(filter));
+        });
+    };
     /**
      * 日历组件更新值
      */
     const RangePickerChange = (e) => {
-        const totalDays = 365 * 24 * 60 * 60 * 1000 // 一年
+        const totalDays = 365 * 24 * 60 * 60 * 1000; // 一年
         const startTime = e[0];
         const endTime = e[1];
         const totalSelectDays = endTime - startTime;
-        if(totalSelectDays > totalDays) {
-            message.info('仅支持查询时间周期为1年的数据')
-            const startDate = moment().subtract(365, 'days')
-            const endDate = moment().endOf('day')
+        if (totalSelectDays > totalDays) {
+            message.info('仅支持查询时间周期为1年的数据');
+            const startDate = moment().subtract(365, 'days');
+            const endDate = moment().endOf('day');
             e[0] = startDate;
             e[1] = endDate;
         }
-    }
-    
-
+    };
     return (
         <Fragment>
             <Form>
-            <FormItem label='时间范围' {...formItemLayout} className='timeRange'>
-                {getFieldDecorator('time', {
-                    initialValue: [startDate, endDate]
-                })(
-                    <RangePicker
-                        format='YYYY-MM-DD'
-                        onChange={RangePickerChange}
-                        placeholder={['开始时间', '结束时间']}
-                        allowClear={false}
-                    />
-                )} 
-            </FormItem>
-            <FormItem {...formItemLayout} label='涉及地点' className='shortMedia timeQuickSel'>
-                {getFieldDecorator('placeName')(
-                    <Cascader 
-                    options={initData}  
-                    allowClear={false} 
-                    placeholder='请选择地点' 
-                    expandTrigger='hover'
-                    // onChange={fetchLocation}
-                    changeOnSelect
-                    />
-                )}
-            </FormItem>
-            {/* <FormItem {...formItemLayout} label='发布者' className='shortMedia timeRange inputWidth'>
-                {getFieldDecorator('author',{
-                    initialValue: '',
-                    rules: [
-                        {
-                            max:50,message: '发布者长度不得大于50位!' 
-                        }
-                    ],
-                })(
-                    <Input placeholder='查找发布者' onBlur={this.inputOnBlur}/>
-                )}
-            </FormItem> */}
-            <FormItem {...formItemLayout} label='发布者' className='shortMedia timeRange inputWidth'>
-                {getFieldDecorator('author',{
-                    initialValue: '',
-                    rules: [
-                        {
-                            max:50,message: '发布者长度不得大于50位!' 
-                        }
-                    ],
-                })(
-                    <Input placeholder='查找发布者' onBlur={inputOnBlur}/>
-                )}
-            </FormItem>
-            <Button type='primary' onClick={searchBtn} className={styles.btn1}>搜索</Button>
-            <br/>
-            {/* <Button type='primary' onClick={}>搜索</Button> */}
-            <div onClick={() => { log(); setTemp(3); }}>xyz {temp}</div>
-            {/* <div onClick={() => setCount(count => count + 1)}>useeffect</div> */}
-            <input />
+                <FormItem label='时间范围' {...formItemLayout} className='timeRange'>
+                    {getFieldDecorator('time', {
+                        initialValue: [startDate, endDate]
+                    })(
+                        <RangePicker
+                            format='YYYY-MM-DD'
+                            onChange={RangePickerChange}
+                            placeholder={['开始时间', '结束时间']}
+                            allowClear={false}
+                        />
+                    )} 
+                </FormItem>
+                <FormItem {...formItemLayout} label='涉及地点' className='shortMedia timeQuickSel'>
+                    {getFieldDecorator('placeName')(
+                        <Cascader 
+                        options={initData}  
+                        allowClear={false} 
+                        placeholder='请选择地点'
+                        expandTrigger='hover'
+                        // onChange={fetchLocation}
+                        changeOnSelect
+                        />
+                    )}
+                </FormItem>
+                <FormItem {...formItemLayout} label='发布者' className='shortMedia timeRange inputWidth'>
+                    {getFieldDecorator('author',{
+                        initialValue: '',
+                        rules: [
+                            {
+                                max:50,message: '发布者长度不得大于50位!'
+                            }
+                        ],
+                    })(
+                        <Input placeholder='查找发布者' onBlur={inputOnBlur}/>
+                    )}
+                </FormItem>
+                <Button type='primary' onClick={searchBtn} className={styles.btn1}>搜索</Button>
+                <br/>
+                {/* <Button type='primary' onClick={}>搜索</Button> */}
+                <div onClick={() => { log(); setTemp(3); }}>xyz {temp}</div>
+                {/* <div onClick={() => setCount(count => count + 1)}>useeffect</div> */}
+                <input />
         </Form>
             <h1>
                 useState的用法:
