@@ -161,7 +161,7 @@ const List = (props) => {
                         <Input placeholder='查找发布者' onBlur={inputOnBlur}/>
                     )}
                 </FormItem>
-                <div>呵呵呵呵呵呵🙃</div>
+                <div>呵呵呵呵呵🙃</div>
                 <Button type='primary' onClick={searchBtn} className={styles.btn1}>搜索</Button>
                 <br/>
                 {/* <Button type='primary' onClick={}>搜索</Button> */}
