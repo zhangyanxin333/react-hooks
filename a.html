@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>css3旋转立方体效果</title>
+        <style type="text/css">
+            *{
+                margin: 0;
+                padding: 0;
+            }
+            .box{
+                width: 400px;
+                height: 400px;
+                border: 1px solid #000;
+                margin: 30px auto;
+                perspective: 1200px;/*设置元素被查看位置的视图----景深 看物体的远近 数值大越远*/
+                -webkit-perspective: 1200px; /* Safari 和 Chrome */
+            }
+            .box ul{
+                width: 300px;
+                height: 300px;
+                border: 1px solid #000000;
+                position: relative;
+                transform-style: preserve-3d;  /*设置3d场景*/
+                -webkit-transform-style: preserve-3d;    /* Safari 和 Chrome */
+                animation: move 10s infinite linear;  /*运动时间代表动画循环快慢*/
+                transform-origin: center center 150px; /*第三个需要给具体数值*/
+                -webkit-transform-origin:center center 150px;
+                margin: 50px;
+            }
+            .box ul li{
+                width: 300px;
+                height: 300px;
+                line-height: 300px;
+                position: absolute;
+                font-size: 50px;
+                transition: all 10s;
+                text-align: center;
+                list-style: none;
+            }
+            .box ul li:nth-of-type(1){
+                background: red;
+                opacity: 0.5;
+            }
+            .box ul li:nth-of-type(2){
+                background: blue;
+                opacity: 0.5;
+                transform: translateX(300px) rotateY(-90deg);
+                -webkit-transform: translateX(300px) rotateY(-90deg);    /* Safari 和 Chrome */
+                transform-origin: left;
+                -webkit-transform-origin:left;
+            }
+            .box ul li:nth-of-type(3){
+                background: blueviolet;
+                opacity: 0.5;
+                transform: translateX(-300px) rotateY(90deg);
+                -webkit-transform: translateX(-300px) rotateY(90deg);
+                transform-origin: right;
+                -webkit-transform-origin:right;
+            }
+            .box ul li:nth-of-type(4){
+                background: brown;
+                opacity: 0.5;
+                transform: translateY(-300px) rotateX(-90deg);
+                -webkit-transform: translateY(-300px) rotateX(-90deg);
+                transform-origin: bottom;
+                -webkit-transform-origin:bottom;
+            }
+            .box ul li:nth-of-type(5){
+                background: deeppink;
+                opacity: 0.5;
+                transform: translateY(300px) rotateX(90deg);
+                -webkit-transform: translateY(300px) rotateX(90deg);
+                transform-origin: top;
+                -webkit-transform-origin:top;
+            }
+            .box ul li:nth-of-type(6){
+                background: yellow;
+                opacity: 0.5;
+                transform: translateZ(300px);
+                -webkit-transform: translateZ(300px);
+            }
+            @keyframes move{
+                from{transform: rotateY(0deg);}
+                to{transform: rotateY(360deg);}
+            }
+            @-webkit-keyframes move{
+                from{-webkit-transform: rotateY(0deg);}
+                to{-webkit-transform: rotateY(360deg);}
+            }
+        </style>
+    </head>
+    <body>
+        <div class="box">
+            <ul>
+                    <li><img src="http://t10.baidu.com/it/u=1176902823,1342671704&fm=173&app=25&f=JPEG?w=640&h=640&s=BCAC699454C2D4EE52BC0CCA0300A017"
+                        alt=""></li>
+                        <li><img src="http://t10.baidu.com/it/u=1036308867,3155358637&fm=173&app=25&f=JPEG?w=640&h=803&s=A2181CC7D84206CC0FC2A12203003049"
+                            alt=""></li><li><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1559649988777&di=32547dd818dc186f51957c72dd50efc4&imgtype=0&src=http%3A%2F%2Fimg.tukexw.com%2Fimg%2F66c4e23556403a9e.jpg"
+                                alt=""></li><li><img src="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3271273070,2330318037&fm=26&gp=0.jpg"
+                                    alt=""></li><li><img src="https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3139583619,70397886&fm=26&gp=0.jpg"
+                                        alt=""></li><li><img src="https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1392979418,1822047967&fm=15&gp=0.jpg"
+                                            alt=""></li>
+            </ul>
+        </div>
+    </body>
+</html>

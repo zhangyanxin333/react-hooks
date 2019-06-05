@@ -2952,7 +2952,7 @@ eslint-plugin-jsx-a11y@5.1.1:
 
 eslint-plugin-react-hooks@^1.5.0:
   version "1.5.0"
-  resolved "https://registry.npm.taobao.org/eslint-plugin-react-hooks/download/eslint-plugin-react-hooks-1.5.0.tgz#cdd958cfff55bd5fa4f84db90d1490fb5ca4ae2b"
+  resolved "https://registry.npm.taobao.org/eslint-plugin-react-hooks/download/eslint-plugin-react-hooks-1.5.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Feslint-plugin-react-hooks%2Fdownload%2Feslint-plugin-react-hooks-1.5.0.tgz#cdd958cfff55bd5fa4f84db90d1490fb5ca4ae2b"
   integrity sha1-zdlYz/9VvV+k+E25DRSQ+1ykris=
 
 eslint-plugin-react@7.4.0:

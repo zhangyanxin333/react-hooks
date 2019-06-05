@@ -1,7 +1,7 @@
 /* eslint-disable */
-import React, {useState, useEffect, Fragment} from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import styles from './list.less';
-import {Form, Button, DatePicker, Cascader, Input, message} from 'antd';
+import { Form, Button, DatePicker, Cascader, Input, message } from 'antd';
 import moment from 'moment';
 import serve from '../utils/axios';
 const List = (props) => {
@@ -9,29 +9,37 @@ const List = (props) => {
     const [endDate] = useState(moment().startOf('day'));
     // axios 请求数据
     const [initData, setData] = useState([]);
-    const {Item: FormItem} = Form;
-    const {RangePicker} = DatePicker;
+    const { Item: FormItem } = Form;
+    const { RangePicker } = DatePicker;
     const formItemLayout = {
         labelCol: {
-            xs: {span: 24},
-            sm: {span: 2},
+            xs: { span: 24 },
+            sm: { span: 2 },
         },
         wrapperCol: {
-            xs: {span: 24},
-            sm: {span: 16},
+            xs: { span: 24 },
+            sm: { span: 16 },
         },
     };
-    const {getFieldDecorator} = props.form;
+    const { getFieldDecorator } = props.form;
     const [temp, setTemp] = React.useState(5);
-    const [initSearch, setSearch] = useState({belong: 'sort,human,place'});
+    const [initSearch, setSearch] = useState({ belong: 'sort,human,place' });
     const log = () => {
         setTimeout(() => {
-            // console.log('3 秒前 temp = 5，现在 temp =', temp);
-        }, 1000);
+            console.log('3 秒前 temp = 5，现在 temp =', temp);
+        }, 10000);
     };
     // const [count, setCount] = React.useState(0);
 
-    const [initInput, setInput] = useState({belong: 'sort,human,place'});
+    const [initInput, setInput] = useState({ belong: 'sort,human,place' });
+    const [count1, setCount1] = useState(0);
+
+    useEffect(() => {
+        const id = setInterval(() => {
+            // setCount1(c => c+ 1);
+        }, 1000);
+        return () => clearInterval(id);
+    }, [ ]); //[count1]
     // 请求地名只需要请求一次
     useEffect(() => {
         async function fetchData() {
@@ -47,14 +55,15 @@ const List = (props) => {
             }
         }
         fetchData();
-    }, []);
+    }),[initInput];
     // 搜索条件
     useEffect(() => {
         async function postSearch() {
             const db = await serve.postSearch(initSearch);
-            db.map(val => {
-                return [val];
-            });
+            return db
+            // db.map(val => {
+            //     return [val];
+            // });
             // console.log(db);
         }
         postSearch();
@@ -62,10 +71,10 @@ const List = (props) => {
     // 输入框 这里获取的是失焦事件
     useEffect(() => {
         async function postSearch() {
-            const db = await serve.postSearch(initInput);
-            db.map(val => {
-                return [val];
-            });
+            // const db = await serve.postSearch(initInput);
+            // db.map(val => {
+            //     return [val];
+            // });
         }
         postSearch();
     }, [initInput]);
@@ -97,7 +106,7 @@ const List = (props) => {
         props.form.validateFields((err, filter) => {
             if (!err) {
                 let newConditon = updateTime(filter);
-                newConditon = Object.assign({belong: 'sort,human,place'}, newConditon);
+                newConditon = Object.assign({ belong: 'sort,human,place' }, newConditon);
                 setInput(initInput => newConditon);
             }
             setSearch(initInput => updateTime(filter));
@@ -122,6 +131,22 @@ const List = (props) => {
             e[1] = endDate;
         }
     };
+
+    const [count, setCount] = useState(0);
+
+    function handleAlertClick() {
+        setTimeout(() => {
+            alert('You clicked on: ' + count);
+        }, 3000);
+    }
+    const [initNum,setInitNum] = useState(0)
+    const currentNum = () => {
+        setInitNum(initNum + 1)
+        console.log(initNum)
+    }
+    useEffect(() => {
+        console.log(initNum)
+    })
     return (
         <Fragment>
             <Form>
@@ -135,42 +160,55 @@ const List = (props) => {
                             placeholder={['开始时间', '结束时间']}
                             allowClear={false}
                         />
-                    )} 
+                    )}
                 </FormItem>
                 <FormItem {...formItemLayout} label='涉及地点' className='shortMedia timeQuickSel'>
                     {getFieldDecorator('placeName')(
-                        <Cascader 
-                        options={initData}  
-                        allowClear={false} 
-                        placeholder='请选择地点'
-                        expandTrigger='hover'
-                        // onChange={fetchLocation}
-                        changeOnSelect
+                        <Cascader
+                            options={initData}
+                            allowClear={false}
+                            placeholder='请选择地点'
+                            expandTrigger='hover'
+                            // onChange={fetchLocation}
+                            changeOnSelect
                         />
                     )}
                 </FormItem>
                 <FormItem {...formItemLayout} label='发布者' className='shortMedia timeRange inputWidth'>
-                    {getFieldDecorator('author',{
+                    {getFieldDecorator('author', {
                         initialValue: '',
                         rules: [
                             {
-                                max:50,message: '发布者长度不得大于50位!'
+                                max: 50, message: '发布者长度不得大于50位!'
                             }
                         ],
                     })(
-                        <Input placeholder='查找发布者' onBlur={inputOnBlur}/>
+                        <Input placeholder='查找发布者' onBlur={inputOnBlur} />
                     )}
                 </FormItem>
                 <div>呵呵呵呵呵🙃</div>
                 <Button type='primary' onClick={searchBtn} className={styles.btn1}>搜索</Button>
-                <br/>
+                <br />
                 {/* <Button type='primary' onClick={}>搜索</Button> */}
                 <div onClick={() => { log(); setTemp(3); }}>xyz {temp}</div>
                 {/* <div onClick={() => setCount(count => count + 1)}>useeffect</div> */}
                 <input />
                 <div>哈哈哈哈哈😀1234</div>
                 <div>哈哈哈哈哈😀1234</div>
-        </Form>
+            </Form>
+            <h1>{count1}</h1>
+            <p>You clicked {initNum} times</p>
+            <button onClick={ () => { currentNum() ;  }}>
+                Click me
+            </button>
+            <p>You clicked {count} times</p>
+            <button onClick={() => setCount(count + 1)}>
+                Click me
+            </button>
+            <button onClick={handleAlertClick}>
+                Show alert
+            </button>
+
             <h1>
                 useState的用法:
             </h1>
@@ -178,15 +216,15 @@ const List = (props) => {
                 const [value,setValue] = useState(false)  //value相当于类组件里的初始化的state，setValue相当于this.setState() setValue(true)
             </h2>
             <h2>
-            同步异步的概念：类组件里
+                同步异步的概念：类组件里
             </h2>
             <h4>
                 在 log 函数执行的那个 Render 过程里，temp 的值可以看作常量 5，执行 setTemp(3) 时会交由一个全新的 Render 渲染，所以不会执行 log 函数。而 3 秒后执行的内容是由 temp 为 5 的那个 Render 发出的，所以结果自然为 5。
                 原因就是 temp、log 都拥有 Capture Value 特性。
             </h4>
-            <br/>
+            <br />
             <h4>在函数式组件里没有了this指向的问题在类组件里的this.state.a 可以直接使用a来代替</h4>
-            <br/>
+            <br />
             <h1>
                 useEffect获取数据的用法
             </h1>
@@ -209,10 +247,32 @@ const List = (props) => {
                 3>.输入框只要我一输入就去请求接口，就可以捕获输入框的事件使用usestate去更新这个值
                 4>.与usereducer的结合使用
                 5>.事件的异常捕获
+                
+            </h3>
+                第五个问题   React只会在浏览器绘制后运行effects
+                    1>.该 Hook 接收一个包含命令式、且可能有副作用代码的函数，通常，组件卸载时需要清除 effect 创建的诸如订阅或计时器 ID 等资源。要实现这一点，useEffect 函数需返回一个清除函数
+                    2>.错误的心智模型(忘记生命周期)
+                    假设第一次渲染的时候props是  id: 10，第二次渲染的时候是   id: 20。你可能会认为发生了下面的这些事：
+                    React 清除了  id: 10  的effect。
+                    React 渲染   id: 20   的UI。
+                    React 运行   id: 20   的effec
+                    正常渲染顺序
+                    React 渲染 id: 20 的UI。
+                    浏览器绘制。我们在屏幕上看到 id: 20 的UI。
+                    React 清除 id: 10 的effect。
+                    React 运行 id: 20 的effect。
+
+
+
+
+
+            <h1>useReducer的用法</h1>
+            <h3>
+                当你想要更新一个状态并且这个状态依赖于另一个状态的值时，你可能需要用到usereducer
             </h3>
         </Fragment>
-        
-        
+
+
     );
 };
 

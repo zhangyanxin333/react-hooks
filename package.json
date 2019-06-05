@@ -93,5 +93,6 @@
         "hooks": {
             "pre-commit": "npm run precommit"
         }
-    }
+    },
+    "proxy": "http://tag-dev.kube.univer"
 }
